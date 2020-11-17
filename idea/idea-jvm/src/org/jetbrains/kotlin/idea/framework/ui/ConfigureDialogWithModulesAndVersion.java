@@ -41,7 +41,7 @@ import org.jetbrains.kotlin.idea.configuration.ConfigureKotlinInProjectUtilsKt;
 import org.jetbrains.kotlin.idea.configuration.KotlinProjectConfigurator;
 import org.jetbrains.kotlin.idea.configuration.RepositoryDescription;
 import org.jetbrains.kotlin.idea.util.VersioningKt;
-import org.jetbrains.kotlin.idea.versions.KotlinRuntimeLibraryUtilKt;
+import org.jetbrains.kotlin.idea.versions.CommonRuntimeUtilKt;
 
 import javax.swing.*;
 import java.awt.*;
@@ -178,7 +178,7 @@ public class ConfigureDialogWithModulesAndVersion extends DialogWrapper {
         public static Collection<String> loadVersions(String minimumVersion) throws Exception {
         List<String> versions = Lists.newArrayList();
 
-        String bundledRuntimeVersion = KotlinRuntimeLibraryUtilKt.bundledRuntimeVersion();
+        String bundledRuntimeVersion = CommonRuntimeUtilKt.bundledRuntimeVersion();
         RepositoryDescription repositoryDescription = ConfigureKotlinInProjectUtilsKt.getRepositoryForVersion(bundledRuntimeVersion);
         if (repositoryDescription != null && repositoryDescription.getBintrayUrl() != null) {
             HttpURLConnection eapConnection = HttpConfigurable.getInstance().openHttpConnection(repositoryDescription.getBintrayUrl() + bundledRuntimeVersion);
