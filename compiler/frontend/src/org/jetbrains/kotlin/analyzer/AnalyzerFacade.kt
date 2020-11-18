@@ -155,13 +155,25 @@ class LazyModuleDependencies<M : ModuleInfo>(
         }
 
         sdkDescriptor?.builtIns?.builtInsModule?.let { sdkBuiltinsDescriptor ->
-            moduleDescriptors.add(sdkBuiltinsDescriptor)
+            if (moduleDescriptors.add(sdkBuiltinsDescriptor)) {
+                sdkBuiltInsModuleDescriptor = sdkBuiltinsDescriptor
+            }
         }
 
         moduleDescriptors.toList()
     }
 
+    private var sdkBuiltInsModuleDescriptor: ModuleDescriptorImpl? = null
+
+    private val _packageDependencies = storageManager.createLazyValue {
+        allDependencies.filter {
+            it != sdkBuiltInsModuleDescriptor
+        }
+    }
+
     override val allDependencies: List<ModuleDescriptorImpl> get() = dependencies()
+
+    override val packageFragmentDependencies: List<ModuleDescriptorImpl> get() = _packageDependencies()
 
     override val directExpectedByDependencies by storageManager.createLazyValue {
         module.expectedBy.map {

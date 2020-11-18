@@ -94,7 +94,7 @@ class ModuleDescriptorImpl @JvmOverloads constructor(
 
     private val packageFragmentProviderForWholeModuleWithDependencies by lazy {
         val moduleDependencies = dependencies.sure { "Dependencies of module $id were not set before querying module content" }
-        val dependenciesDescriptors = moduleDependencies.allDependencies
+        val dependenciesDescriptors = moduleDependencies.packageFragmentDependencies
         assert(this in dependenciesDescriptors) { "Module $id is not contained in his own dependencies, this is probably a misconfiguration" }
         dependenciesDescriptors.forEach { dependency ->
             assert(dependency.isInitialized) {
@@ -158,6 +158,7 @@ class ModuleDescriptorImpl @JvmOverloads constructor(
 
 interface ModuleDependencies {
     val allDependencies: List<ModuleDescriptorImpl>
+    val packageFragmentDependencies: List<ModuleDescriptorImpl>
     val modulesWhoseInternalsAreVisible: Set<ModuleDescriptorImpl>
     val directExpectedByDependencies: List<ModuleDescriptorImpl>
     val allExpectedByDependencies: Set<ModuleDescriptorImpl>
@@ -168,4 +169,6 @@ class ModuleDependenciesImpl(
     override val modulesWhoseInternalsAreVisible: Set<ModuleDescriptorImpl>,
     override val directExpectedByDependencies: List<ModuleDescriptorImpl>,
     override val allExpectedByDependencies: Set<ModuleDescriptorImpl>,
-) : ModuleDependencies
+) : ModuleDependencies {
+    override val packageFragmentDependencies: List<ModuleDescriptorImpl> = allDependencies
+}
