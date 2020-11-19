@@ -44,9 +44,8 @@ class JvmPlatformKindResolution : IdePlatformKindResolution {
     override val libraryKind: PersistentLibraryKind<*>?
         get() = null
 
-    override fun createLibraryInfo(project: Project, library: Library): List<LibraryInfo> = when {
-        else -> listOf(JvmLibraryInfo(project, library))
-    }
+    override fun createLibraryInfo(project: Project, library: Library): List<LibraryInfo> =
+        listOf(JvmLibraryInfo(project, library))
 
     override val kind get() = JvmIdePlatformKind
 
