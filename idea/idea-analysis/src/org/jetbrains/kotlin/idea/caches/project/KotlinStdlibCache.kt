@@ -13,6 +13,7 @@ import com.intellij.psi.search.DelegatingGlobalSearchScope
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.indexing.FileBasedIndex
 import org.jetbrains.kotlin.caches.project.cacheInvalidatingOnRootModifications
+import org.jetbrains.kotlin.idea.configuration.IdeBuiltInsLoadingState
 import org.jetbrains.kotlin.idea.util.application.runReadAction
 import org.jetbrains.kotlin.idea.vfilefinder.KotlinStdlibIndex
 import org.jetbrains.kotlin.name.FqName
@@ -24,8 +25,17 @@ interface KotlinStdlibCache {
 
     companion object {
         fun getInstance(project: Project): KotlinStdlibCache =
-            ServiceManager.getService(project, KotlinStdlibCache::class.java)
-                ?: error("Failed to load service ${KotlinStdlibCache::class.java.name}")
+            if (IdeBuiltInsLoadingState.isFromClassLoader) {
+                Disabled
+            } else {
+                ServiceManager.getService(project, KotlinStdlibCache::class.java)
+                    ?: error("Failed to load service ${KotlinStdlibCache::class.java.name}")
+            }
+
+        val Disabled = object : KotlinStdlibCache {
+            override fun isStdlib(libraryInfo: LibraryInfo) = false
+            override fun isStdlibDependency(libraryInfo: LibraryInfo) = false
+        }
     }
 }
 

@@ -70,7 +70,10 @@ class JvmPlatformKindResolution : IdePlatformKindResolution {
             sdkDependency == null -> DefaultBuiltIns.Instance
             stdlibDependency == null || moduleInfo is SdkInfo ->
                 JvmBuiltIns(projectContext.storageManager, JvmBuiltIns.Kind.FROM_CLASS_LOADER)
-            else -> JvmBuiltIns(projectContext.storageManager, JvmBuiltIns.Kind.FROM_DEPENDENCIES)
+            else -> {
+                require(!IdeBuiltInsLoadingState.isFromClassLoader) { "Incorrect attempt to create built-ins from module dependencies" }
+                JvmBuiltIns(projectContext.storageManager, JvmBuiltIns.Kind.FROM_DEPENDENCIES)
+            }
         }
     }
 
