@@ -42,7 +42,8 @@ object JvmPlatformConfigurator : PlatformConfiguratorBase(
         SynchronizedOnInlineMethodChecker,
         DefaultCheckerInTailrec,
         FunctionDelegateMemberNameClashChecker,
-        JvmRecordApplicabilityChecker
+        JvmRecordApplicabilityChecker,
+        ClassInheritsJavaSealedClassChecker
     ),
 
     additionalCallCheckers = listOf(
