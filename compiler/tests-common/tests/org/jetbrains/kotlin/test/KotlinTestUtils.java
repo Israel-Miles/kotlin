@@ -409,14 +409,22 @@ public class KotlinTestUtils {
 
     @NotNull
     public static File getJdk15Home() {
-        return getCustomJdkHome("JDK_15");
+        return getCustomJdkHome("JDK_15", "JDK_15_0");
     }
 
     @NotNull
     private static File getCustomJdkHome(String version) {
+        return getCustomJdkHome(version, null);
+    }
+
+    @NotNull
+    private static File getCustomJdkHome(String version, @Nullable String otherOption) {
         String jdk = System.getenv(version);
         if (jdk == null) {
-            throw new AssertionError("Environment variable JDK_15 is not set!");
+            if (otherOption != null) {
+                return getCustomJdkHome(otherOption, null);
+            }
+            throw new AssertionError(String.format("Environment variable %s is not set!", version));
         }
         return new File(jdk);
     }
