@@ -3,6 +3,6 @@ open class B(x: Int) {
     fun foo() = 1
 }
 class A : B {
-    constructor(x: Int, y: Int = x <!AMBIGUITY!>+<!> <!UNRESOLVED_REFERENCE!>foo<!>() + <!INSTANCE_ACCESS_BEFORE_SUPER_CALL!>this<!>.<!UNRESOLVED_REFERENCE!>foo<!>() + super.<!UNRESOLVED_REFERENCE!>foo<!>()) :
-        <!INAPPLICABLE_CANDIDATE!>super<!>(x <!AMBIGUITY!>+<!> <!UNRESOLVED_REFERENCE!>foo<!>() + <!INSTANCE_ACCESS_BEFORE_SUPER_CALL!>this<!>.<!UNRESOLVED_REFERENCE!>foo<!>() + super.<!UNRESOLVED_REFERENCE!>foo<!>())
+    constructor(x: Int, y: Int = x <!AMBIGUITY!>+<!> <!UNRESOLVED_REFERENCE!>foo<!>() <!UNRESOLVED_REFERENCE!>+<!> <!INSTANCE_ACCESS_BEFORE_SUPER_CALL!>this<!>.<!UNRESOLVED_REFERENCE!>foo<!>() <!UNRESOLVED_REFERENCE!>+<!> super.<!UNRESOLVED_REFERENCE!>foo<!>()) :
+        super(x <!AMBIGUITY!>+<!> <!UNRESOLVED_REFERENCE!>foo<!>() <!UNRESOLVED_REFERENCE!>+<!> <!INSTANCE_ACCESS_BEFORE_SUPER_CALL!>this<!>.<!UNRESOLVED_REFERENCE!>foo<!>() <!UNRESOLVED_REFERENCE!>+<!> super.<!UNRESOLVED_REFERENCE!>foo<!>())
 }

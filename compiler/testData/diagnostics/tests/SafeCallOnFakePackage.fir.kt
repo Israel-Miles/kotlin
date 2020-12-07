@@ -12,5 +12,5 @@ val s: String = "test"
 fun ff() {
     val a = Test?.<!UNRESOLVED_REFERENCE!>FOO<!>
     val b = foo?.<!UNRESOLVED_REFERENCE!>s<!>
-    System?.<!UNRESOLVED_REFERENCE!>out<!>.<!UNRESOLVED_REFERENCE!>println<!>(a + b)
+    System?.<!UNRESOLVED_REFERENCE!>out<!>.<!UNRESOLVED_REFERENCE!>println<!>(a <!UNRESOLVED_REFERENCE!>+<!> b)
 }

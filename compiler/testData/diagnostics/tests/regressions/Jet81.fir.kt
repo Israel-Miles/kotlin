@@ -18,7 +18,7 @@ object A {
 class Test2 {
   private val a = object {
     init {
-      b + 1
+      b <!UNRESOLVED_REFERENCE!>+<!> 1
     }
     val x = b
     val y = 1

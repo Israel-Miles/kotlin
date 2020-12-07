@@ -78,10 +78,10 @@ fun test2() { // to extension lambda 1
     val i26: E1 = id { s: String -> this + s.length } // oi- ni+
     val i26a: E1 = id { s -> this + s.length } // oi+ ni+
     val e = E.VALUE
-    val w27 = <!INAPPLICABLE_CANDIDATE!>W2<!>(when (e) { E.VALUE ->  { s: String -> <!NO_THIS!>this<!> + s.length } }) // oi- ni+
-    val w27a = <!INAPPLICABLE_CANDIDATE!>W2<!>(when (e) { E.VALUE ->  { s -> <!NO_THIS!>this<!> + s.<!UNRESOLVED_REFERENCE!>length<!> } }) // oi+ ni+
-    val i27: E1 = when (e) { E.VALUE ->  { s: String -> <!NO_THIS!>this<!> + s.length } } // oi+ ni+
-    val i27a: E1 = when (e) { E.VALUE ->  { s -> <!NO_THIS!>this<!> + s.<!UNRESOLVED_REFERENCE!>length<!> } } // oi+ ni+
+    val w27 = <!INAPPLICABLE_CANDIDATE!>W2<!>(when (e) { E.VALUE ->  { s: String -> <!NO_THIS!>this<!> <!UNRESOLVED_REFERENCE!>+<!> s.length } }) // oi- ni+
+    val w27a = <!INAPPLICABLE_CANDIDATE!>W2<!>(when (e) { E.VALUE ->  { s -> <!NO_THIS!>this<!> <!UNRESOLVED_REFERENCE!>+<!> s.<!UNRESOLVED_REFERENCE!>length<!> } }) // oi+ ni+
+    val i27: E1 = when (e) { E.VALUE ->  { s: String -> <!NO_THIS!>this<!> <!UNRESOLVED_REFERENCE!>+<!> s.length } } // oi+ ni+
+    val i27a: E1 = when (e) { E.VALUE ->  { s -> <!NO_THIS!>this<!> <!UNRESOLVED_REFERENCE!>+<!> s.<!UNRESOLVED_REFERENCE!>length<!> } } // oi+ ni+
 
     val w28 = <!INAPPLICABLE_CANDIDATE!>W2<!> { i: Int, s -> i <!AMBIGUITY!>+<!> s.<!UNRESOLVED_REFERENCE!>length<!> } // oi- ni-
     val i28: E1 = id { i: Int, s -> i <!AMBIGUITY!>+<!> s.<!UNRESOLVED_REFERENCE!>length<!> } // oi- ni-

@@ -6,7 +6,7 @@ fun test(): Array<Int> {
 
     foo([""])
 
-    val p = [1, 2] + [3, 4]
+    val p = [1, 2] <!UNRESOLVED_REFERENCE!>+<!> [3, 4]
 
     return [1, 2]
 }

@@ -7,16 +7,16 @@ package org.jetbrains.kotlin.fir.resolve.calls.tower
 
 import org.jetbrains.kotlin.fir.expressions.FirResolvedQualifier
 import org.jetbrains.kotlin.fir.resolve.calls.*
+import org.jetbrains.kotlin.fir.resolve.fullyExpandedType
 import org.jetbrains.kotlin.fir.scopes.FirScope
 import org.jetbrains.kotlin.fir.scopes.ProcessorAction
 import org.jetbrains.kotlin.fir.symbols.AbstractFirBasedSymbol
+import org.jetbrains.kotlin.fir.symbols.StandardClassIds
 import org.jetbrains.kotlin.fir.symbols.impl.FirCallableSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirNamedFunctionSymbol
 import org.jetbrains.kotlin.fir.typeContext
 import org.jetbrains.kotlin.fir.types.ConeClassLikeType
-import org.jetbrains.kotlin.fir.types.ConeStarProjection
 import org.jetbrains.kotlin.fir.types.coneType
-import org.jetbrains.kotlin.fir.types.constructClassType
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.types.AbstractTypeChecker
@@ -128,6 +128,7 @@ private class TowerScopeLevelProcessor(
         builtInExtensionFunctionReceiverValue: ReceiverValue?
     ) {
         // Check explicit extension receiver for default package members
+        val resolutionContext = candidateFactory.context
         if (symbol is FirNamedFunctionSymbol && dispatchReceiverValue == null &&
             extensionReceiverValue != null &&
             callInfo.explicitReceiver !is FirResolvedQualifier &&
@@ -137,16 +138,20 @@ private class TowerScopeLevelProcessor(
             if (extensionReceiverType != null) {
                 val declarationReceiverType = (symbol as? FirCallableSymbol<*>)?.fir?.receiverTypeRef?.coneType
                 if (declarationReceiverType is ConeClassLikeType) {
-                    if (!AbstractTypeChecker.isSubtypeOf(
-                            candidateFactory.context.session.typeContext,
-                            extensionReceiverType,
-                            declarationReceiverType.lookupTag.constructClassType(
-                                declarationReceiverType.typeArguments.map { ConeStarProjection }.toTypedArray(),
-                                isNullable = true
+                    if (extensionReceiverType.lookupTag != declarationReceiverType.lookupTag) {
+                        val session = resolutionContext.session
+                        val typeContext = session.typeContext
+                        val extensionReceiverTypeConstructor = extensionReceiverType.fullyExpandedType(session).lookupTag
+
+                        if (extensionReceiverTypeConstructor.classId != StandardClassIds.Nothing &&
+                            !AbstractTypeChecker.isSubtypeOfClass(
+                                typeContext.newBaseTypeCheckerContext(errorTypesEqualToAnything = true, stubTypesEqualToAnything = true),
+                                extensionReceiverTypeConstructor,
+                                declarationReceiverType.fullyExpandedType(session).lookupTag
                             )
-                        )
-                    ) {
-                        return
+                        ) {
+                            return
+                        }
                     }
                 }
             }
@@ -161,7 +166,7 @@ private class TowerScopeLevelProcessor(
                 dispatchReceiverValue,
                 extensionReceiverValue,
                 builtInExtensionFunctionReceiverValue
-            ), candidateFactory.context
+            ), resolutionContext
         )
     }
 
