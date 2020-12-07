@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.caches.resolve
 
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.projectRoots.Sdk
 import com.intellij.openapi.roots.libraries.Library
@@ -28,6 +29,8 @@ import org.jetbrains.kotlin.resolve.TargetEnvironment
 import org.jetbrains.kotlin.resolve.jvm.JvmPlatformParameters
 import org.jetbrains.kotlin.resolve.jvm.JvmResolverForModuleFactory
 
+private val LOG = Logger.getInstance(JvmPlatformKindResolution::class.java)
+
 class JvmPlatformKindResolution : IdePlatformKindResolution {
     override fun isLibraryFileForPlatform(virtualFile: VirtualFile): Boolean {
         return false // TODO: No library kind for JVM
@@ -50,8 +53,8 @@ class JvmPlatformKindResolution : IdePlatformKindResolution {
     override val kind get() = JvmIdePlatformKind
 
     override fun getKeyForBuiltIns(moduleInfo: ModuleInfo, sdkInfo: SdkInfo?, stdlibInfo: LibraryInfo?): BuiltInsCacheKey {
-        require(stdlibInfo == null || IdeBuiltInsLoadingState.isFromDependenciesForJvm) {
-            "Standard library ${stdlibInfo!!.displayedName} provided for built-ins, but loading from dependencies is disabled"
+        if (IdeBuiltInsLoadingState.isFromClassLoader && stdlibInfo != null) {
+            LOG.error("Standard library ${stdlibInfo.displayedName} provided for built-ins, but loading from dependencies is disabled")
         }
 
         return if (sdkInfo != null)
@@ -70,7 +73,9 @@ class JvmPlatformKindResolution : IdePlatformKindResolution {
             stdlibDependency == null || moduleInfo is SdkInfo ->
                 JvmBuiltIns(projectContext.storageManager, JvmBuiltIns.Kind.FROM_CLASS_LOADER)
             else -> {
-                require(!IdeBuiltInsLoadingState.isFromClassLoader) { "Incorrect attempt to create built-ins from module dependencies" }
+                if (IdeBuiltInsLoadingState.isFromClassLoader) {
+                    LOG.error("Incorrect attempt to create built-ins from module dependencies")
+                }
                 JvmBuiltIns(projectContext.storageManager, JvmBuiltIns.Kind.FROM_DEPENDENCIES)
             }
         }

@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.idea.caches.resolve
 
 import com.intellij.openapi.components.ServiceManager
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.ModificationTracker
 import org.jetbrains.kotlin.analyzer.*
 import org.jetbrains.kotlin.analyzer.common.CommonAnalysisParameters
@@ -152,8 +153,8 @@ class IdeaResolverForProject(
                 newBuiltIns.initialize(sdkDescriptor, isAdditionalBuiltInsFeaturesSupported)
 
                 if (newBuiltIns.kind == JvmBuiltIns.Kind.FROM_DEPENDENCIES) {
-                    require(IdeBuiltInsLoadingState.isFromDependenciesForJvm) {
-                        "Incorrect attempt to create built-ins from module dependencies"
+                    if (!IdeBuiltInsLoadingState.isFromDependenciesForJvm) {
+                        LOG.error("Incorrect attempt to create built-ins from module dependencies")
                     }
 
                     val stdlibDescriptor = stdlib?.let { resolverForSdk.descriptorForModule(it) }
@@ -172,6 +173,10 @@ class IdeaResolverForProject(
             return module.dependencies().lazyClosure { it.dependencies() }.firstOrNull {
                 it is LibraryInfo && it.isKotlinStdlib(projectContextFromSdkResolver.project)
             } as? LibraryInfo
+        }
+
+        private companion object {
+            private val LOG = Logger.getInstance(BuiltInsCache::class.java)
         }
     }
 
