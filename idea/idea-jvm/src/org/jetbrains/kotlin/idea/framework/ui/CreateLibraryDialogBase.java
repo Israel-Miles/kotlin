@@ -22,7 +22,7 @@ import com.intellij.ui.SeparatorWithText;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.kotlin.idea.versions.CommonRuntimeUtilKt;
+import org.jetbrains.kotlin.idea.versions.KotlinRuntimeLibraryUtilKt;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,7 +50,7 @@ public abstract class CreateLibraryDialogBase extends DialogWrapper {
 
         init();
 
-        compilerTextLabel.setText(compilerTextLabel.getText() + " - " + CommonRuntimeUtilKt.bundledRuntimeVersion());
+        compilerTextLabel.setText(compilerTextLabel.getText() + " - " + KotlinRuntimeLibraryUtilKt.bundledRuntimeVersion());
 
         pathPanel = new ChooseLibraryPathPanel(defaultPath);
         pathPanel.addValidityListener(new ValidityListener() {

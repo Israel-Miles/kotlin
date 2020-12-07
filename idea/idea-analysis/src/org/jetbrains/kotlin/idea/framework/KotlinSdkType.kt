@@ -12,10 +12,10 @@ import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl
 import com.intellij.openapi.projectRoots.impl.SdkConfigurationUtil
 import com.intellij.util.Consumer
 import org.jdom.Element
+import org.jetbrains.kotlin.config.KotlinCompilerVersion
 import org.jetbrains.kotlin.idea.KotlinIcons
 import org.jetbrains.kotlin.idea.KotlinIdeaAnalysisBundle
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
-import org.jetbrains.kotlin.idea.versions.bundledRuntimeVersion
 import org.jetbrains.kotlin.utils.PathUtil
 import javax.swing.JComponent
 
@@ -63,7 +63,7 @@ class KotlinSdkType : SdkType("KotlinSDK") {
 
     override fun sdkHasValidPath(sdk: Sdk) = true
 
-    override fun getVersionString(sdk: Sdk) = bundledRuntimeVersion()
+    override fun getVersionString(sdk: Sdk): String = KotlinCompilerVersion.VERSION
 
     override fun supportsCustomCreateUI() = true
 

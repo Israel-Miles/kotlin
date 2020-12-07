@@ -38,6 +38,7 @@ import com.intellij.util.indexing.FileBasedIndex
 import com.intellij.util.indexing.ScalarIndexExtension
 import com.intellij.util.text.VersionComparatorUtil
 import org.jetbrains.kotlin.config.JvmTarget
+import org.jetbrains.kotlin.config.KotlinCompilerVersion
 import org.jetbrains.kotlin.idea.KotlinBundle
 import org.jetbrains.kotlin.idea.framework.JavaRuntimeDetectionUtil
 import org.jetbrains.kotlin.idea.framework.isExternalLibrary
@@ -133,6 +134,9 @@ enum class LibraryJarDescriptor(
 
     fun getPathInPlugin() = getPath(PathUtil.kotlinPathsForIdeaPlugin)
 }
+
+fun bundledRuntimeVersion(): String = KotlinCompilerVersion.VERSION
+
 
 fun getLocalJar(kotlinRuntimeJar: VirtualFile?): VirtualFile? {
     if (kotlinRuntimeJar == null) return null
