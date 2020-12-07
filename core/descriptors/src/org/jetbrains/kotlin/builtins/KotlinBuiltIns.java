@@ -203,14 +203,9 @@ public abstract class KotlinBuiltIns {
 
     @NotNull
     public ClassDescriptor getBuiltInClassByFqName(@NotNull FqName fqName) {
-        ClassDescriptor descriptor = getBuiltInClassByFqNameNonStrict(fqName);
+        ClassDescriptor descriptor = DescriptorUtilKt.resolveClassByFqName(builtInsModule, fqName, NoLookupLocation.FROM_BUILTINS);
         assert descriptor != null : "Can't find built-in class " + fqName;
         return descriptor;
-    }
-
-    @Nullable
-    public ClassDescriptor getBuiltInClassByFqNameNonStrict(@NotNull FqName fqName) {
-        return DescriptorUtilKt.resolveClassByFqName(builtInsModule, fqName, NoLookupLocation.FROM_BUILTINS);
     }
 
     @NotNull
