@@ -47,8 +47,6 @@ public abstract class KotlinBuiltIns {
 
     private final StorageManager storageManager;
 
-    private final Throwable createdAt;
-
     public static final Name BUILTINS_MODULE_NAME = Name.special("<built-ins module>");
 
     protected KotlinBuiltIns(@NotNull StorageManager storageManager) {
@@ -99,8 +97,6 @@ public abstract class KotlinBuiltIns {
                 return (ClassDescriptor) classifier;
             }
         });
-
-        this.createdAt = new Throwable();
     }
 
     protected void createBuiltInsModule(boolean isFallback) {

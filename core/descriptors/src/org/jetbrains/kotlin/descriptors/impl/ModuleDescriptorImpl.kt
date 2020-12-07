@@ -48,8 +48,6 @@ class ModuleDescriptorImpl @JvmOverloads constructor(
         this.capabilities[REFINER_CAPABILITY] = Ref(null)
     }
 
-    private val createdAt: Throwable = Throwable()
-
     private var dependencies: ModuleDependencies? = null
     private var packageFragmentProviderForModuleContent: PackageFragmentProvider? = null
 
