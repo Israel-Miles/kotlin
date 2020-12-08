@@ -51,6 +51,7 @@ import org.jetbrains.kotlin.resolve.jvm.multiplatform.OptionalAnnotationPackageF
 import org.jetbrains.kotlin.resolve.jvm.platform.JvmPlatformAnalyzerServices
 import org.jetbrains.kotlin.resolve.lazy.KotlinCodeAnalyzer
 import org.jetbrains.kotlin.resolve.lazy.declarations.DeclarationProviderFactory
+import java.lang.IllegalStateException
 
 fun createContainerForLazyResolveWithJava(
     jvmPlatform: TargetPlatform,
