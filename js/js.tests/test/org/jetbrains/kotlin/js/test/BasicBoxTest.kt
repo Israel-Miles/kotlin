@@ -462,7 +462,6 @@ abstract class BasicBoxTest(
             incrementalData = null,
             expectActualLinker = expectActualLinker,
             errorIgnorancePolicy
-        ,
         )
         val outputFile = File(outputFileName)
         val dceOutputFile = File(dceOutputFileName)

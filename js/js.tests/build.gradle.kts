@@ -231,7 +231,6 @@ val npmInstall by tasks.getting(NpmTask::class) {
 }
 
 val runMocha by task<NpmTask> {
-    dependsOn(":dist")
     setWorkingDir(buildDir)
 
     val target = if (project.hasProperty("teamcity")) "runOnTeamcity" else "test"
