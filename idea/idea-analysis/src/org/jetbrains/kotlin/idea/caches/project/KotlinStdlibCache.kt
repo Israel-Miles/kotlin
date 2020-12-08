@@ -54,15 +54,8 @@ class KotlinStdlibCacheImpl(val project: Project) : KotlinStdlibCache {
     ) : DelegatingGlobalSearchScope(GlobalSearchScope.allScope(project)) {
         private val fileSystems = directories.mapTo(hashSetOf(), VirtualFile::getFileSystem)
 
-        override fun contains(file: VirtualFile): Boolean {
-            if (file.fileSystem !in fileSystems) return false
-
-            var parent: VirtualFile = file
-            while (true) {
-                if (parent in directories) return true
-                parent = parent.parent ?: return false
-            }
-        }
+        override fun contains(file: VirtualFile): Boolean =
+            file.fileSystem in fileSystems && generateSequence(file, VirtualFile::getParent).any { it in directories }
 
         override fun toString() = "All files under: $directories"
     }
