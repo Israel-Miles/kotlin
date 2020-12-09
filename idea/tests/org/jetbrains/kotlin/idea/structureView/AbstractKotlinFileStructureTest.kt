@@ -7,7 +7,6 @@ package org.jetbrains.kotlin.idea.structureView
 
 import com.intellij.ide.util.FileStructurePopup
 import com.intellij.openapi.util.io.FileUtil
-import com.jetbrains.rd.util.concurrentMapOf
 import org.jetbrains.kotlin.idea.completion.test.configureWithExtraFile
 import org.jetbrains.kotlin.idea.test.KotlinWithJdkAndRuntimeLightProjectDescriptor
 import org.jetbrains.kotlin.idea.test.PluginTestCaseBase
@@ -16,7 +15,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
 abstract class AbstractKotlinFileStructureTest : KotlinFileStructureTestBase() {
@@ -52,8 +50,8 @@ abstract class AbstractKotlinFileStructureTest : KotlinFileStructureTestBase() {
                 |$threads
             """.trimMargin()
         }
-        LOG.debug(message)
         super.tearDown()
+        LOG.error(message)
     }
 
     fun doTest(path: String) {
